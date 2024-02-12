@@ -1,0 +1,95 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaurav.mybatis.springbootmybatis.mapper.SchoolMapper">
+
+    <!-- Insert a new student -->
+    <insert id="insertStudent" parameterType="com.gaurav.mybatis.springbootmybatis.domain.Student">
+        INSERT INTO student (name, age) VALUES (#{name}, #{age})
+    </insert>
+
+    <!-- Insert a new teacher -->
+    <insert id="insertTeacher" parameterType="com.gaurav.mybatis.springbootmybatis.domain.Teacher">
+        INSERT INTO teacher (name, subject_expertise) VALUES (#{name}, #{subjectExpertise})
+    </insert>
+
+    <!-- Insert a new subject -->
+    <insert id="insertSubject" parameterType="com.gaurav.mybatis.springbootmybatis.domain.Subject">
+        INSERT INTO subject (name, description, teacher_id) VALUES (#{name}, #{description}, #{teacherId})
+    </insert>
+
+    <!-- A student opts for subjects -->
+    <insert id="insertStudentSubject">
+        INSERT INTO stud_sub (stud_id, sub_id)
+        VALUES
+        <foreach collection="subjectIds" item="subjectId" index="index" separator=",">
+            (#{studentId}, #{subjectId})
+        </foreach>
+    </insert>
+
+    <!-- Retrieve all students -->
+    <select id="selectAllStudents" resultType="com.gaurav.mybatis.springbootmybatis.domain.Student">
+        SELECT * FROM student
+    </select>
+
+    <!-- Retrieve all subjects -->
+    <select id="selectAllSubjects" resultType="com.gaurav.mybatis.springbootmybatis.domain.Subject">
+        SELECT id, name, description, teacher_id AS teacherId FROM subject
+    </select>
+
+    <!-- Retrieve all teachers -->
+    <select id="selectAllTeachers" resultType="com.gaurav.mybatis.springbootmybatis.domain.Teacher">
+        SELECT * FROM teacher
+    </select>
+
+    <!-- Retrieve subjects opted by a specific student -->
+    <select id="selectStudentWithSubjects" resultMap="studentSubjectResultMap">
+        SELECT
+        s.id,
+        s.name,
+        s.age,
+        sub.id AS subject_id,
+        sub.name AS subject_name,
+        sub.description AS subject_description,
+        sub.teacher_id AS subject_teacherId
+        FROM student s
+        LEFT JOIN stud_sub ss ON s.id = ss.stud_id
+        LEFT JOIN subject sub ON ss.sub_id = sub.id
+        WHERE s.id = #{studentId}
+    </select>
+    <resultMap id="studentSubjectResultMap" type="com.gaurav.mybatis.springbootmybatis.dto.StudentSubjectsDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="subjects" ofType="com.gaurav.mybatis.springbootmybatis.domain.Subject">
+            <id property="id" column="subject_id"/>
+            <result property="name" column="subject_name"/>
+            <result property="description" column="subject_description"/>
+            <result property="teacherId" column="subject_teacherId"/>
+        </collection>
+    </resultMap>
+
+    <!-- Retrieve the subject taught by a specific teacher -->
+    <select id="selectTeacherWithSubject" resultMap="teacherSubjectResultMap">
+        SELECT
+        t.id,
+        t.name,
+        sub.id AS "subject_id",
+        sub.name AS "subject_name",
+        sub.description AS "subject_description",
+        sub.teacher_id AS "subject_teacherId"
+        FROM teacher t
+        LEFT JOIN subject sub ON t.id = sub.teacher_id
+        WHERE t.id = #{teacherId}
+    </select>
+
+    <resultMap id="teacherSubjectResultMap" type="com.gaurav.mybatis.springbootmybatis.dto.TeacherSubjectDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="subject" ofType="com.gaurav.mybatis.springbootmybatis.domain.Subject">
+            <id property="id" column="subject_id"/>
+            <result property="name" column="subject_name"/>
+            <result property="description" column="subject_description"/>
+            <result property="teacherId" column="subject_teacherId"/>
+        </collection>
+    </resultMap>
+
+
+</mapper>
