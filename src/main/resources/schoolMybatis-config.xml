@@ -7,6 +7,13 @@
         <package name="com.gaurav.mybatis.springbootmybatis.domain"/>
     </typeAliases>
     <mappers>
-        <mapper resource="mapper/schoolSqlMapper.xml"/>
+        <!-- Reference to Student Mapper -->
+        <mapper resource="mapper/StudentMapper.xml"/>
+
+        <!-- Reference to Teacher Mapper -->
+        <mapper resource="mapper/TeacherMapper.xml"/>
+
+        <!-- Reference to Subject Mapper -->
+        <mapper resource="mapper/SubjectMapper.xml"/>
     </mappers>
 </configuration>

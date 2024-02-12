@@ -25,7 +25,7 @@ public class TeacherController {
 		return teacherService.getAllTeachers();
 	}
 
-	@GetMapping("/{teacherId}/subject")
+	@GetMapping("/{teacherId}/subjects")
 	public TeacherSubjectDTO getTeacherSubject(@PathVariable int teacherId) {
 		return teacherService.getTeacherSubject(teacherId);
 	}

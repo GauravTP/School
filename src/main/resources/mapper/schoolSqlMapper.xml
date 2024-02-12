@@ -2,7 +2,7 @@
 <mapper namespace="com.gaurav.mybatis.springbootmybatis.mapper.SchoolMapper">
 
     <!-- Insert a new student -->
-    <insert id="insertStudent" parameterType="com.gaurav.mybatis.springbootmybatis.domain.Student">
+    <insert id="insertStudent" parameterType="com.gaurav.mybatis.springbootmybatis.domain.Student" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO student (name, age) VALUES (#{name}, #{age})
     </insert>
 
