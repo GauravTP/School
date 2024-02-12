@@ -2,7 +2,7 @@ package com.gaurav.mybatis.springbootmybatis.service;
 
 import com.gaurav.mybatis.springbootmybatis.domain.Teacher;
 import com.gaurav.mybatis.springbootmybatis.dto.TeacherSubjectDTO;
-import com.gaurav.mybatis.springbootmybatis.mapper.SchoolMapper;
+import com.gaurav.mybatis.springbootmybatis.mapper.TeacherMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,18 +11,21 @@ import java.util.List;
 @Service
 public class TeacherService {
 
+//	@Autowired
+//	private SchoolMapper schoolMapper;
+	
 	@Autowired
-	private SchoolMapper schoolMapper;
+	private TeacherMapper teacherMapper;
 
 	public void addTeacher(Teacher teacher) {
-		schoolMapper.insertTeacher(teacher);
+		teacherMapper.insertTeacher(teacher);
 	}
 
 	public List<Teacher> getAllTeachers() {
-		return schoolMapper.selectAllTeachers();
+		return teacherMapper.selectAllTeachers();
 	}
 
 	public TeacherSubjectDTO getTeacherSubject(int teacherId) {
-		return schoolMapper.selectTeacherWithSubject(teacherId);
+		return teacherMapper.selectTeacherWithSubjects(teacherId);
 	}
 }

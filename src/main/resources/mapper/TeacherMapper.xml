@@ -1,0 +1,26 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaurav.mybatis.springbootmybatis.mapper.TeacherMapper">
+
+    <insert id="insertTeacher" parameterType="com.gaurav.mybatis.springbootmybatis.domain.Teacher">
+        INSERT INTO teacher (name, subjectExpertise) VALUES (#{name}, #{subjectExpertise})
+    </insert>
+
+    <select id="selectAllTeachers" resultType="com.gaurav.mybatis.springbootmybatis.domain.Teacher">
+        SELECT * FROM teacher
+    </select>
+
+    <select id="selectTeacherWithSubjects" resultMap="teacherSubjectResultMap">
+        SELECT t.id, t.name, sub.id AS "subject_id", sub.name AS "subject_name",
+        sub.description AS "subject_description", sub.teacher_id AS "subject_teacherId"
+        FROM teacher t
+        LEFT JOIN subject sub ON t.id = sub.teacher_id
+        WHERE t.id = #{teacherId}
+    </select>
+
+    <resultMap id="teacherSubjectResultMap" type="com.gaurav.mybatis.springbootmybatis.dto.TeacherSubjectDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="subject" resultMap="com.gaurav.mybatis.springbootmybatis.mapper.SubjectMapper.subjectResultMap"/>
+    </resultMap>
+    
+</mapper>
